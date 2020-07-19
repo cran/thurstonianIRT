@@ -90,6 +90,11 @@ make_TIRT_data <- function(data, blocks, direction = c("larger", "smaller"),
   }
   ncomparisons <- (nitems_per_block * (nitems_per_block - 1)) / 2
   items_all <- ulapply(blocks, "[[", "items")
+  if (any(duplicated(items_all))) {
+    stop("Item variables in different blocks needs to have different names. ",
+         "Use the 'names' argument in 'set_block' to equate item ",
+         "parameters across blocks.")
+  }
   nitems <- length(items_all)
   if (nitems != nitems_per_block * nblocks) {
     stop("All blocks should contain the same number of items.")
@@ -263,7 +268,11 @@ convert_factors <- function(data) {
 #' Prepare blocks of items
 #'
 #' Prepare blocks of items and incorporate information
-#' about which item belongs to which trait
+#' about which item belongs to which trait. A block
+#' of items is a set of two or more items presented and answered together
+#' by fully ranking them or selecting the most and/or least favorit
+#' in a forced choice format. A whole test usually contains
+#' several blocks and items may reappear in different blocks.
 #'
 #' @param items Names of item comparisons to be combined
 #' into one block. Should correspond to variables in the data.
@@ -283,6 +292,7 @@ convert_factors <- function(data) {
 #'   traits = c("A", "B", "C")
 #' )
 #'
+#' @seealso \code{\link{set_blocks_from_df}}
 #' @export
 set_block <- function(items, traits, names = items, signs = 1) {
   stopifnot(length(items) == length(traits))
@@ -309,6 +319,86 @@ empty_block <- function() {
   stopifnot(is.TIRTblocks(e2))
   e1$blocks <- c(e1$blocks, e2$blocks)
   e1
+}
+
+#' Prepare blocks of items from a data frame
+#'
+#' Prepare blocks of items and incorporate information
+#' about which item belongs to which trait from a pre-existing dataframe.
+#' This is a wrapper function for \code{\link{set_block}}, eliminating the need
+#' to manually set each item, trait, name and sign (loading) info per block.
+#'
+#' A block of items is a set of two or more items presented and answered
+#' together by fully ranking them or selecting the most and/or least favorite
+#' in a forced choice format. A whole test usually contains
+#' several blocks and items may reappear in different blocks.
+#'
+#' @param data A \code{data.frame} containing all the required columns
+#' (see the arguments below) to specify the item blocks.
+#' @param blocks Name of column vector denoting the block each item
+#' corresponds to. Each block must have an equal number of items.
+#' @param items Name of column vector denoting items to be combined into
+#' one block. Should correspond to variables in the data.
+#' @param traits Names of column vector denoting the traits to which each
+#' item belongs.
+#' @param names Optional column vector of item names in the output.
+#' Can be used to equate parameters of items across blocks,
+#' if the same item was used in different blocks.
+#' @param signs Name of column vector with expected signs of the
+#' item loadings (1 or -1).
+#'
+#' @examples
+#' block_info <- data.frame(
+#'   block = rep(1:4, each = 3),
+#'   items = c("i1", "i2", "i3", "i4", "i5", "i6",
+#'             "i7", "i8", "i9", "i10", "i11", "i12"),
+#'   traits = rep(c("t1", "t2", "t3"), times = 4),
+#'   signs = c(1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, 1)
+#' )
+#'
+#' blocks <- set_blocks_from_df(
+#'   data = block_info,
+#'   blocks = "block",
+#'   items = "items",
+#'   traits = "traits",
+#'   signs = "signs"
+#' )
+#'
+#' @seealso \code{\link{set_block}}
+#' @export
+set_blocks_from_df <- function(data, blocks = "block", items = "item",
+                               traits = "trait", names = items,
+                               signs = "sign") {
+  # input checks
+  data <- as.data.frame(data)
+  blocks <- as_one_character(blocks)
+  items <- as_one_character(items)
+  traits <- as_one_character(traits)
+  names <- as_one_character(names)
+  signs <- as_one_character(signs)
+  # check each block has the same number of items
+  block_ids <- as.character(data[[blocks]])
+  nitems_per_block <- table(as.character(data[[blocks]]))
+  if (length(unique(nitems_per_block)) > 1L) {
+    stop("All blocks should contain the same number of items.")
+  }
+  if (any(nitems_per_block < 2)) {
+    stop("Blocks should contain more than one item.")
+  }
+  # save unique block_ids and number of blocks
+  block_ids <- unique(block_ids)
+  nblocks <- length(block_ids)
+  # fill list with the set_block call for each block
+  block_list <- list()
+  for(i in seq_along(block_ids)) {
+    sel <- data[[blocks]] == block_ids[i]
+    block_list[[i]] <- set_block(
+      items = data[sel, items], traits = data[sel, traits],
+      names = data[sel, names], signs = data[sel, signs]
+    )
+  }
+  # concatenate blocks
+  Reduce("+", block_list)
 }
 
 is.TIRTdata <- function(x) {
@@ -351,7 +441,7 @@ family_options <- function(software = NULL) {
   } else if (software == "lavaan") {
     out <- c("bernoulli", "gaussian")
   } else if (software == "mplus") {
-    out <- c("bernoulli")
+    out <- c("bernoulli", "gaussian")
   }
   out
 }

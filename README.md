@@ -1,6 +1,7 @@
 thurstonianIRT
 ==============
 
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01662/status.svg)](https://doi.org/10.21105/joss.01662)
 [![Build
 Status](https://travis-ci.org/paul-buerkner/thurstonianIRT.svg?branch=master)](https://travis-ci.org/paul-buerkner/thurstonianIRT)
 [![CRAN
@@ -9,20 +10,24 @@ Version](http://www.r-pkg.org/badges/version/thurstonianIRT)](https://cran.r-pro
 Overview
 --------
 
-The **thurstonianIRT** package allows to fit various models from Item
-Response Theory (IRT) for forced-choice questionnaires, most notably the
-Thurstonian IRT model originally proposed by (Brown & Maydeu-Olivares,
-2011). The key characteristic of forced-choice questionnaires is that
-participants cannot endorse all items at the same time and instead have
-to make a comparative judgment between two or more items. Such a format
-comes with the hope of providing more valid inference in situation where
-participants have motivation to not answer honestly (e.g., in personnel
-selection), but instead respond in a way that appears favorable in the
-given situation. Whether forced-choice questionnaires and the
-corresponding IRT models live up to this hope remains a topic of debate
-(e.g., see Bürkner, Schulte, & Holling, 2019) but it is in any case
-necessary to provide software for fitting these statistical models both
-for practical and research purposes.
+The **thurstonianIRT** package allows to fit various models from [Item Response
+Theory (IRT)](https://en.wikipedia.org/wiki/Item_response_theory) for
+forced-choice questionnaires, most notably the Thurstonian IRT model originally
+proposed by (Brown & Maydeu-Olivares, 2011). IRT in general comes with several
+advantages over classical test theory, for instance, the ability to model
+varying item difficulties as well as item factor loadings on the participants'
+traits they are supposed to measure. Moreover, if multiple traits are modeled
+at the same time, their correlation can be incorporated into an IRT model to
+improve the overall estimation accuracy. The key characteristic of
+forced-choice questionnaires is that participants cannot endorse all items at
+the same time and instead have to make a comparative judgment between two or
+more items. Such a format comes with the hope of providing more valid inference
+in situation where participants have motivation to not answer honestly (e.g.,
+in personnel selection), but instead respond in a way that appears favorable in
+the given situation. Whether forced-choice questionnaires and the corresponding
+IRT models live up to this hope remains a topic of debate (e.g., see Bürkner,
+Schulte, & Holling, 2019) but it is in any case necessary to provide software
+for fitting these statistical models both for practical and research purposes.
 
 In the original formulation, the Thurstonian IRT model works on
 dichotomous pairwise comparisons and models the probability of endorsing
@@ -40,7 +45,7 @@ library(thurstonianIRT)
 ```
 
 As a simple example consider a data set of 4 blocks each containing 3
-items (i.e., triplets) answered by 100 participants.
+items (i.e., triplets) answered by 200 participants.
 
 ``` r
 data("triplets")
@@ -119,12 +124,12 @@ head(pr)
 #> # A tibble: 6 x 6
 #>      id trait estimate    se lower_ci upper_ci
 #>   <int> <chr>    <dbl> <dbl>    <dbl>    <dbl>
-#> 1     1 t1      0.360  0.544   -0.623    1.50 
-#> 2     1 t2     -1.49   0.567   -2.64    -0.454
-#> 3     1 t3      0.0196 0.603   -1.06     1.29 
-#> 4     2 t1     -0.868  0.536   -1.98     0.165
-#> 5     2 t2      0.654  0.583   -0.409    1.91 
-#> 6     2 t3      0.383  0.607   -0.723    1.62
+#> 1     1 t1       0.301 0.502   -0.638  1.28   
+#> 2     1 t2      -1.29  0.568   -2.44  -0.266  
+#> 3     1 t3       0.340 0.549   -0.699  1.44   
+#> 4     2 t1      -0.982 0.527   -2.05  -0.00288
+#> 5     2 t2       0.880 0.608   -0.295  2.16   
+#> 6     2 t3       0.665 0.584   -0.474  1.89
 ```
 
 The thurstonianIRT package not only comes with model fitting functions
@@ -134,7 +139,7 @@ models. Below we simulate data with a very similar structure to the
 
 ``` r
 sim_data <- sim_TIRT_data(
-  npersons = 100,
+  npersons = 200,
   ntraits = 3,
   nblocks_per_trait = 4,
   gamma = 0,
@@ -160,8 +165,10 @@ The structure of the data is the same as what we obtain via the
 `make_TIRT_data` function and can readily be passed to the model fitting
 functions.
 
-How to install thurstonianIRT
------------------------------
+FAQ
+---
+
+### How to install thurstonianIRT
 
 To install the latest release version from CRAN use
 
@@ -177,6 +184,29 @@ if (!requireNamespace("remotes")) {
 }
 remotes::install_github("paul-buerkner/thurstonianIRT")
 ```
+
+### I am new to thurstonianIRT. Where can I start?
+
+After reading the README, you probably have a good overview already over
+the packages purporse and main functionality. You can dive deeper by
+reading the package’s documentation perhaps starting with
+`help("thurstonianIRT")`. If you want to perform a simulation study with
+the package, I recommend you take a look at
+`vignette("TIRT_sim_tests")`.
+
+### Where do I ask questions, propose a new feature, or report a bug?
+
+To ask a question, propose a new feature or report a bug, please open an
+issue on [GitHub](https://github.com/paul-buerkner/thurstonianIRT).
+
+### How can I contribute to thurstonianIRT?
+
+If you want to contribute to thurstonianIRT, you can best do this via
+the package’s [GitHub](https://github.com/paul-buerkner/thurstonianIRT)
+page. There, you can fork the repository, open new issues (e.g., to
+report a bug), or make pull requests to improve the software and
+documentation. I am grateful for all kinds of contributions and be they
+just as small as fixing a typo in the documentation.
 
 References
 ----------

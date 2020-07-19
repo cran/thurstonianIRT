@@ -4,7 +4,8 @@
 \name{triplets}
 \alias{triplets}
 \title{Triplets of Pairwise Comparisons}
-\format{A data frame of 100 observations containing
+\format{
+A data frame of 200 observations containing
   information on 12 variables.
   Overall, the 12 items measure 3 different traits.
   Items 1, 4, 7, and 10 load on trait 1,
@@ -24,7 +25,8 @@
   \item{i10i11}{Response preferences between item 10 and 11.}
   \item{i10i12}{Response preferences between item 10 and 12.}
   \item{i11i12}{Response preferences between item 11 and 12.}
-}}
+}
+}
 \source{
 Brown, A., & Maydeu-Olivares, A. (2011). Item response modeling of
 forced-choice questionnaires. Educational and Psychological Measurement,
@@ -35,7 +37,7 @@ triplets
 }
 \description{
 This data set contains synthetic data
-of 100 participants on 4 triplets. In each triplet,
+of 200 participants on 4 triplets. In each triplet,
 participants had to rank the three alternative items according
 to their preference. Reponses were then converted into
 a set of dichotomous pairwise responses between all the
