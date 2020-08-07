@@ -1,6 +1,6 @@
-675dc48131a94f77493e74a79a7109d1 *DESCRIPTION
+24dc903887c169955e18142b022711ce *DESCRIPTION
 29c840383a93002819680e6b4222a325 *NAMESPACE
-67b173e4ef64449d064129a2171c1973 *NEWS.md
+5236ca18063fc00effe9374ff47f3ccd *NEWS.md
 d56b52a0c6e5b17703eda18d028725a3 *R/TIRTfit-methods.R
 a6c31c663dc83e208d5cb02ff197665a *R/data-helpers.R
 3e2aa1dcf77df1297dd71684fd11924c *R/datasets.R
@@ -17,7 +17,7 @@ aefbc5c00caad6ec520914cfe1c22bf3 *R/zzz.R
 8ac1a364b7645b95e92a57cd8586cb52 *data/triplets.rda
 57d216b602787b9454f5a29989897ecd *inst/doc/TIRT_sim_tests.R
 525c16837b6385be3b21f1952c7f2ec2 *inst/doc/TIRT_sim_tests.Rmd
-cd387494bd8ee3b439a99b21e7cb86e9 *inst/doc/TIRT_sim_tests.html
+03fe7b88fc5b005e8dd9a0052dd65f33 *inst/doc/TIRT_sim_tests.html
 855c064dbf8deaff96c8dc8a87169109 *inst/include/meta_header.hpp
 63adffd60372beb03e8a6c63baa958a9 *man/cor_matrix.Rd
 4cc195b57a3a3ef74cc714471c98c482 *man/fit_TIRT_lavaan.Rd
@@ -44,7 +44,7 @@ eb771401c8767c02613dd8c34664c9b6 *src/stan_files/chunks/model-likelihood.stan
 a5697cc3f541ddb14b60074f8c3793c2 *src/stan_files/thurstonian_irt_model.stan
 d6611ded802c7bd2162d3dfbaed181b6 *src/stan_files/thurstonian_irt_model_newdata.stan
 f5056c8c18e5a41895c9be6edaba0eab *tests/testthat.R
-a068c2a3d28d43bb8ddf71a10fc9b605 *tests/testthat/tests.lavaan.R
+96f5c89826b4daac4be429e93e66a860 *tests/testthat/tests.lavaan.R
 ca4c2a6b40f017212aaf48f8fe6bf172 *tests/testthat/tests.make_TIRT_data.R
 3f75a8b36126e4ab9ed053ef7324acdb *tests/testthat/tests.mplus.R
 0b0aefddc0dd4f838471f9329e3f97ba *tests/testthat/tests.stan.R

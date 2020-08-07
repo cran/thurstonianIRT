@@ -2,8 +2,8 @@ Package: thurstonianIRT
 Encoding: UTF-8
 Type: Package
 Title: Thurstonian IRT Models
-Version: 0.11.0
-Date: 2020-07-16
+Version: 0.11.1
+Date: 2020-08-03
 Authors@R: c(person("Paul-Christian", "Bürkner", 
                     email = "paul.buerkner@gmail.com",
                     role = c("aut", "cre")),
@@ -32,9 +32,9 @@ URL: https://github.com/paul-buerkner/thurstonianIRT
 BugReports: https://github.com/paul-buerkner/thurstonianIRT/issues
 NeedsCompilation: yes
 RoxygenNote: 7.1.1
-Packaged: 2020-07-17 08:17:23 UTC; paulb
+Packaged: 2020-08-07 07:32:58 UTC; paulb
 Author: Paul-Christian Bürkner [aut, cre],
   Trustees of Columbia University [cph]
 Maintainer: Paul-Christian Bürkner <paul.buerkner@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-07-19 14:30:03 UTC
+Date/Publication: 2020-08-07 08:20:03 UTC
