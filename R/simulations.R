@@ -236,7 +236,7 @@ add_response <- function(data, family) {
 
 make_trait_combs <- function(ntraits, nblocks_per_trait, nitems_per_block,
                              comb_blocks = c("fixed", "random"),
-                             maxtrys_outer = 20, maxtrys_inner = 1e6) {
+                             maxtrys_outer = 100, maxtrys_inner = 1e6) {
   comb_blocks <- match.arg(comb_blocks)
   stopifnot((ntraits * nblocks_per_trait) %% nitems_per_block == 0L)
   if (comb_blocks == "fixed") {
@@ -256,25 +256,31 @@ make_trait_combs <- function(ntraits, nblocks_per_trait, nitems_per_block,
       }
     }
     out <- out[!remove, ]
-    possible_rows <- seq_len(nrow(out))
+    all_rows <- seq_len(nrow(out))
     nbpt_chosen <- rep(0, ntraits)
 
-    .choose <- function(nblocks, maxtrys) {
+    .choose <- function(nblocks, maxtrys, all_rows) {
       # finds suitable blocks
       chosen <- rep(NA, nblocks)
+      possible_rows <- all_rows
       i <- ntrys <- 1
       while (i <= nblocks && ntrys <= maxtrys) {
+        if (!length(possible_rows)) {
+          # all rows were selected already; start fresh
+          possible_rows <- all_rows
+        }
         ntrys <- ntrys + 1
         chosen[i] <- possible_rows[sample(seq_along(possible_rows), 1)]
         traits_chosen <- out[chosen[i], ]
         nbpt_chosen[traits_chosen] <- nbpt_chosen[traits_chosen] + 1
         valid <- max(nbpt_chosen) <= min(nbpt_chosen) + 1 &&
           !any(nbpt_chosen[traits_chosen] > nblocks_per_trait)
+        possible_rows <- setdiff(possible_rows, chosen[i])
         if (valid) {
-          possible_rows <- possible_rows[-chosen[i]]
           i <- i + 1
         } else {
           # revert number of blocks per trait chosen
+          # and try finding traits for block i again
           nbpt_chosen[traits_chosen] <- nbpt_chosen[traits_chosen] - 1
         }
       }
@@ -285,7 +291,8 @@ make_trait_combs <- function(ntraits, nblocks_per_trait, nitems_per_block,
     chosen <- rep(NA, nblocks)
     while (anyNA(chosen) && i <= maxtrys_outer) {
       i <- i + 1
-      chosen <- .choose(nblocks, maxtrys = maxtrys_inner)
+      chosen <- .choose(nblocks, maxtrys = maxtrys_inner,
+                        all_rows = all_rows)
     }
     if (anyNA(chosen)) {
       stop("Could not find a set of suitable blocks.")
