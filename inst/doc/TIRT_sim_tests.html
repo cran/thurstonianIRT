@@ -12,7 +12,7 @@
 
 <meta name="author" content="Paul Bürkner" />
 
-<meta name="date" content="2021-09-09" />
+<meta name="date" content="2021-09-26" />
 
 <title>Test parameter recovery via simulations with thurstonianIRT</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Test parameter recovery via simulations with thurstonianIRT</h1>
 <h4 class="author">Paul Bürkner</h4>
-<h4 class="date">2021-09-09</h4>
+<h4 class="date">2021-09-26</h4>
 
 
 
@@ -229,21 +229,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">rel =</span> <span class="fu">cor</span>(estimate, truth)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code># A tibble: 15 x 3
+# Groups:   trait [5]
+   trait  source   rel
+   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
+ 1 trait1 lavaan 0.833
+ 2 trait1 mplus  0.848
+ 3 trait1 stan   0.849
+ 4 trait2 lavaan 0.823
+ 5 trait2 mplus  0.839
+ 6 trait2 stan   0.842
+ 7 trait3 lavaan 0.799
+ 8 trait3 mplus  0.831
+ 9 trait3 stan   0.830
+10 trait4 lavaan 0.803
+11 trait4 mplus  0.832
+12 trait4 stan   0.831
+13 trait5 lavaan 0.821
+14 trait5 mplus  0.830
+15 trait5 stan   0.837</code></pre>
 <p>Lastly, we can also compute and investigate the trait correlations between different engines so check whether they really estimate equivalent trait scores.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> pred <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ensure correct ordering of traits</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SC =</span> <span class="fu">paste0</span>(source, <span class="st">&quot;_&quot;</span>, trait),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">SC =</span> <span class="fu">factor</span>(SC, <span class="at">levels =</span> <span class="fu">unique</span>(SC))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, SC, estimate) <span class="sc">%&gt;%</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">&quot;SC&quot;</span>, <span class="at">value =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(eta, .) <span class="sc">%&gt;%</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> pred <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ensure correct ordering of traits</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SC =</span> <span class="fu">paste0</span>(source, <span class="st">&quot;_&quot;</span>, trait),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">SC =</span> <span class="fu">factor</span>(SC, <span class="at">levels =</span> <span class="fu">unique</span>(SC))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, SC, estimate) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">&quot;SC&quot;</span>, <span class="at">value =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(eta, .) <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span></code></pre></div>
 <p>We would expect the correlations of the estimates of the same trait across engines to be very high, that is, higher than 0.95 at least. We can verify that this is indeed the case as exemplified for <code>trait1</code> below.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>trait1 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">c</span>(<span class="st">&quot;stan&quot;</span>, <span class="st">&quot;lavaan&quot;</span>, <span class="st">&quot;mplus&quot;</span>), <span class="st">&quot;_trait1&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(cor_matrix[trait1, trait1], <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>trait1 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">c</span>(<span class="st">&quot;stan&quot;</span>, <span class="st">&quot;lavaan&quot;</span>, <span class="st">&quot;mplus&quot;</span>), <span class="st">&quot;_trait1&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(cor_matrix[trait1, trait1], <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>              stan_trait1 lavaan_trait1 mplus_trait1
+stan_trait1          1.00          0.99         1.00
+lavaan_trait1        0.99          1.00         0.99
+mplus_trait1         1.00          0.99         1.00</code></pre>
 <p>Taken together, we have seen how to set up and perform a simple simulation study to test the parameter recovery of Thurstonian IRT models and, at the same time, test the correctness of the thurstonianIRT software.</p>
 </div>
 <div id="references" class="section level1">
