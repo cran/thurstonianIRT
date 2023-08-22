@@ -76,8 +76,8 @@ make_mplus_code <- function(data, iter = 1000,
   mplus_factor_correlations <- collapse(
     sapply(1:(ntraits - 1),
       function(i) paste0(
-        "trait", i, " WITH ",
-        paste0("trait", (i+1):ntraits, "*0", collapse = " "),
+        "trait", i, " WITH\n  ",
+        paste0("trait", (i+1):ntraits, "*0", collapse = "\n  "),
         ";\n"
       )
     )
@@ -254,7 +254,7 @@ make_mplus_code <- function(data, iter = 1000,
 #'   format = "pairwise", family = "bernoulli", range = c(0, 1)
 #' )
 #'
-#' \donttest{
+#' \dontrun{
 #' # fit the data using Mplus
 #' fit <- fit_TIRT_mplus(triplets_long)
 #' print(fit)
@@ -263,6 +263,7 @@ make_mplus_code <- function(data, iter = 1000,
 #'
 #' @export
 fit_TIRT_mplus <- function(data, ...) {
+  require_package("MplusAutomation")
   file_name <- collapse(sample(0:9, 10, TRUE))
   mplus_data <- make_sem_data(data)
   mplus_model <- make_mplus_code(

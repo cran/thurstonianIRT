@@ -1,3 +1,11 @@
+# thurstonianIRT 0.12.3
+
+* Avoid a CRAN check warning.
+
+# thurstonianIRT 0.12.2
+
+* Fix line-length issues in Mplus code generation. (#34)
+
 # thurstonianIRT 0.12.1
 
 * Fix data simulations via `sim_TIRT_data` for non-triplet formats.
